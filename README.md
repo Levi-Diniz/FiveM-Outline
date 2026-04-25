@@ -1,58 +1,68 @@
-# Referência Técnica: Sistema de Outline (Bordas) - FiveM
+# Technical Reference: Outline System (Borders) - FiveM
 
-Este repositório serve como um **guia de referência e exemplo técnico** para desenvolvedores que desejam implementar sistemas de contorno (bordas) em entidades no FiveM utilizando as funções nativas de renderização do GTA V.
+<img width="825" height="703" alt="image" src="https://github.com/user-attachments/assets/21a7bbb7-9a5c-4798-a830-0bbf4d73b5d9" />
+<br/>
+This repository serves as a **reference guide and technical example** for developers looking to implement entity outlines (borders) in FiveM using GTA V’s native rendering functions.
 
-> [!NOTE]
-> Este não é um script "plug-and-play" finalizado, mas sim uma base didática para que outros desenvolvedores possam entender a lógica e criar seus próprios sistemas personalizados.
+> [!NOTE]  
+> This is not a "plug-and-play" script, but a didactic foundation to help developers understand the logic and build their own custom systems.
 
-## 🧠 Lógica de Implementação
+---
 
-O sistema de Outline funciona através de um loop de renderização que monitora entidades específicas e aplica o efeito visual. A lógica fundamental explicada aqui é:
+## 🧠 Implementation Logic
 
-1.  **Configuração Global**: Definir uma única vez (ou quando mudar) como a linha deve parecer (Cor, Shader e Técnica).
-2.  **Loop de Monitoramento**: Verificar constantemente quais jogadores próximos atendem aos critérios (distância, vida, aliado/inimigo).
-3.  **Ativação de Estado**: Ligar ou desligar o contorno na entidade conforme a necessidade.
+The Outline system operates through a rendering loop that monitors specific entities and applies the visual effect. The fundamental logic explained here is:
 
-## 🛠️ Detalhes Técnicos (Referência)
+1.  **Global Configuration**: Define once (or upon change) how the line should look (Color, Shader, and Technique).
+2.  **Monitoring Loop**: Constantly check which nearby players meet the criteria (distance, health, ally/enemy status).
+3.  **State Activation**: Toggle the outline on the entity as needed.
 
-### Natives Principais
-- `SetEntityDrawOutline(entity, toggle)`: O comando principal que ativa/desativa a borda.
-- `SetEntityDrawOutlineColor(r, g, b, a)`: Define a estética visual (RGBA).
-- `SetEntityDrawOutlineShader(shader)`: Define o estilo do brilho (comumente `1`).
-- `SetEntityDrawOutlineRenderTechnique(technique)`: Define a técnica (ex: `"waterreflection"` para maior nitidez).
+---
 
-### Trecho de Código Comentado (`client-side/core.lua`)
+## 🛠️ Technical Details (Reference)
+
+### Core Natives
+* `SetEntityDrawOutline(entity, toggle)`: The primary command to enable/disable the border.
+* `SetEntityDrawOutlineColor(r, g, b, a)`: Defines the visual aesthetics (RGBA).
+* `SetEntityDrawOutlineShader(shader)`: Sets the glow style (commonly `1`).
+* `SetEntityDrawOutlineRenderTechnique(technique)`: Sets the technique (e.g., `"waterreflection"` for higher sharpness).
+
+### Commented Code Snippet (`client-side/core.lua`)
 
 ```lua
--- Exemplo de Loop de Renderização
+-- Rendering Loop Example
 Citizen.CreateThread(function()
-    setupOutline() -- Configura cores e shaders uma única vez
+    setupOutline() -- Configure colors and shaders once
 
     while true do
-        -- Lógica de busca de jogadores...
+        -- Logic to find players...
         
-        -- Aplicação condicional
+        -- Conditional Application
         if shouldShow then
             SetEntityDrawOutline(targetPed, true)
         else
             SetEntityDrawOutline(targetPed, false)
         end
 
-        Citizen.Wait(500) -- Intervalo para não pesar no processamento
+        Citizen.Wait(500) -- Performance interval to prevent overhead
     end
 end)
 ```
 
-## 🚀 Como usar como referência
+---
 
-1. **Estude o Loop**: Veja como o script gerencia a ativação/desativação para não chamar a native `true` a cada frame sem necessidade.
-2. **Adapte a Lógica de Aliança**: O script possui uma função `isAlly` de exemplo que pode ser substituída por checagens de `StateBags`, `Teams` ou `Factions` do seu próprio framework.
-3. **Experimente Técnicas**: Teste diferentes strings em `SetEntityDrawOutlineRenderTechnique` para ver variações visuais.
+## 🚀 How to use as a Reference
 
-## 📂 Estrutura do Exemplo
-- `client-side/core.lua`: Contém toda a lógica de renderização comentada.
-- `server-side/core.lua`: Estrutura básica para quem deseja expandir com sincronização servidor-cliente.
-- `fxmanifest.lua`: Configuração básica do recurso.
+1.  **Study the Loop**: Observe how the script manages activation/deactivation to avoid calling the `true` native every frame unnecessarily.
+2.  **Adapt Alliance Logic**: The script includes a sample `isAlly` function that can be replaced by `StateBags`, `Teams`, or `Factions` checks from your own framework.
+3.  **Experiment with Techniques**: Test different strings in `SetEntityDrawOutlineRenderTechnique` to discover visual variations.
 
 ---
-*Este material foi criado com fins educativos para a comunidade de desenvolvedores FiveM.*
+
+## 📂 Example Structure
+* `client-side/core.lua`: Contains all commented rendering logic.
+* `server-side/core.lua`: Basic structure for those wishing to expand with server-client synchronization.
+* `fxmanifest.lua`: Basic resource configuration.
+
+---
+*This material was created for educational purposes for the FiveM developer community.*
